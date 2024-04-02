@@ -8,6 +8,7 @@
       "name": "Python: Debug Tests",
       "type": "debugpy",
       "request": "launch",
+      "console": "integratedTerminal",
       "program": "${file}",
       "purpose": [
         "debug-test"
