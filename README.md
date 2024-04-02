@@ -38,3 +38,22 @@ chromedriver --url-base=/wd/hub
 
 ### selenium
 - [official docs](https://www.selenium.dev/documentation/)
+
+### epub
+- https://en.wikipedia.org/wiki/EPUB
+- file structure
+```
+--ZIP Container--
+mimetype
+META-INF/
+  container.xml
+OEBPS/
+  content.opf
+  toc.ncx
+  book-toc.html
+  style.css
+  cover.html
+  chapter0.html
+  chapter1.html
+  ...
+```
