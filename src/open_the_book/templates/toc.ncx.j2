@@ -29,9 +29,9 @@
     </navPoint>
 
     {% for ch in chapters %}
-    <navPoint id="chapter0" playOrder="3">
+    <navPoint id="chapter_{{ch.index}}" playOrder="3">
       <navLabel><text>{{ch.name}}</text></navLabel>
-      <content src="chapter{{ch.index}}.html" />
+      <content src="{{ch.index}}.html" />
     </navPoint>
     {% endfor %}
 
