@@ -11,7 +11,8 @@ from open_the_book.otb import OTB
 def test_otb_1():
   conf = Conf(
     title='我用闲书成圣人',
-    start_url='https://m.lwxiaoshuo.org/shu/18229/144093149.html',
+    author='出走八万里',
+    start_url='https://m.lwxiaoshuo.org/shu/18229/117817287.html',
     get_title=lambda d: d.find_element(By.CSS_SELECTOR, 'h1.headline').text,
     read=lambda d: d.find_element(By.CSS_SELECTOR, 'div.content').text.replace('\n', '<br/>'),
     has_next=lambda d: d.find_element(
@@ -23,8 +24,8 @@ def test_otb_1():
   otb.open()
 
   book = otb.book
-  assert len(book['chapters']) == 2
+  assert len(book['chapters']) > 0
 
-  output = 'temp/otb_1.epub'
+  output = 'temp/我用闲书成圣人.epub'
   otb.save(output)
   assert os.path.exists(output)

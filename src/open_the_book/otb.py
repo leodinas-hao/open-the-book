@@ -1,4 +1,5 @@
 import logging
+from time import sleep
 from zipfile import ZipFile
 
 from selenium import webdriver
@@ -49,6 +50,7 @@ class OTB:
         break
 
       self.conf.next(driver)  # navigate to next chapter
+      sleep(self.conf.throttling)  # throttle
       counter += 1
 
     driver.quit()  # close the browser

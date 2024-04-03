@@ -18,5 +18,6 @@ class Conf:
   title: str = 'Unknown'
   author: str = 'Unknown'
   style_css: Optional[str] = None  # if omitted, default css will be used
-  implicitly_wait: float = 10.0  # implicitly_wait time of the webdriver
+  implicitly_wait: float = 10.0  # implicitly_wait time of the webdriver, in seconds
+  throttling: float = 1  # throttling time, in seconds
   uid: str = field(default_factory=lambda: uuid4().hex)
