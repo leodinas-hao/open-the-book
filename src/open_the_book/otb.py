@@ -1,12 +1,14 @@
 import logging
+from zipfile import ZipFile
 
 from selenium import webdriver
 
 from .conf import Conf
+from .utils import read, render
 
 
 class OTB:
-  '''open-the-book'''
+  '''open the ebook from internet and save as epub'''
 
   def __init__(self, conf: Conf):
     '''init'''
@@ -51,7 +53,20 @@ class OTB:
 
     driver.quit()  # close the browser
 
-  def save(self, output_path):
+  def save(self, output_path: str):
     '''save the book'''
 
-    raise NotImplementedError()
+    self.logger.info(f'saving the book to: {output_path}')
+
+    with ZipFile(output_path, 'w') as epub:
+      # write the mimetype & other default files
+      epub.writestr('mimetype', read('templates/mimetype'))
+      epub.writestr('META-INF/container.xml', read('templates/container.xml'))
+      epub.writestr('OEBPS/style.css', self.conf.style_css if self.conf.style_css else read('templates/style.css'))
+
+      epub.writestr('OEBPS/book-toc.html', render('templates/book-toc.html.j2', self.book))
+      epub.writestr('OEBPS/toc.ncx', render('templates/toc.ncx.j2', self.book))
+      epub.writestr('OEBPS/content.opf', render('templates/content.opf.j2', self.book))
+      epub.writestr('OEBPS/cover.html', render('templates/cover.html.j2', self.book))
+      for ch in self.book['chapters']:
+        epub.writestr(f'OEBPS/{ch["index"]}.html', render('templates/chapter.html.j2', ch))

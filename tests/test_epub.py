@@ -1,3 +1,4 @@
+import os
 from zipfile import ZipFile
 
 import pytest
@@ -22,13 +23,18 @@ def test_simple_epub(output, book):
   with ZipFile(output, 'w') as epub:
     # The first file must be named "mimetype"
     # epub.writestr("mimetype", "application/epub+zip")
-    epub.write('src/open_the_book/templates/mimetype', arcname='mimetype')
-    epub.write('src/open_the_book/templates/container.xml', arcname='META-INF/container.xml')
-    epub.write('src/open_the_book/templates/style.css', arcname='OEBPS/style.css')
+    epub.writestr('mimetype', utils.read('templates/mimetype'))
+    epub.writestr('META-INF/container.xml', utils.read('templates/container.xml'))
+    epub.writestr('OEBPS/style.css', utils.read('templates/style.css'))
 
-    epub.writestr('OEBPS/book-toc.html', utils.render('src/open_the_book/templates/book-toc.html.j2', book))
-    epub.writestr('OEBPS/toc.ncx', utils.render('src/open_the_book/templates/toc.ncx.j2', book))
-    epub.writestr('OEBPS/content.opf', utils.render('src/open_the_book/templates/content.opf.j2', book))
-    epub.writestr('OEBPS/cover.html', utils.render('src/open_the_book/templates/cover.html.j2', book))
+    epub.writestr('OEBPS/book-toc.html', utils.render('templates/book-toc.html.j2', book))
+    epub.writestr('OEBPS/toc.ncx', utils.render('templates/toc.ncx.j2', book))
+    epub.writestr('OEBPS/content.opf', utils.render('templates/content.opf.j2', book))
+    epub.writestr('OEBPS/cover.html', utils.render('templates/cover.html.j2', book))
     for ch in book['chapters']:
-      epub.writestr(f'OEBPS/{ch["index"]}.html', utils.render('src/open_the_book/templates/chapter.html.j2', ch))
+      epub.writestr(f'OEBPS/{ch["index"]}.html', utils.render('templates/chapter.html.j2', ch))
+
+  assert os.path.exists(output)
+
+  # delete the file
+  os.remove(output)

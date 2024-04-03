@@ -14,10 +14,9 @@ body {
   widows: 0;
 }
 
-p {
-  font-family: "Microsoft YaHei", 微软雅黑, 宋体, 仿宋_GB2312, Verdana, Arial, sans-seri;
+.content {
   font-size: 120%;
-  line-height: 125%;
+  line-height: 200%;
   margin-top: 5px;
   margin-bottom: 0;
   margin-left: 0;
