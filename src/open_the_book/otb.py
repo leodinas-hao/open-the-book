@@ -11,15 +11,8 @@ class OTB:
   def __init__(self, conf: Conf):
     '''init'''
 
-    self.conf = conf
     self.logger = logging.getLogger(__name__)
-
-    # init the driver session
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless=new")
-    self.driver = webdriver.Chrome(options=options)
-    self.driver.implicitly_wait(conf.implicitly_wait)
-
+    self.conf = conf
     self.book = {
       'title': conf.title,
       'author': conf.author,
@@ -30,22 +23,33 @@ class OTB:
   def open(self):
     '''open the book to fetch the contents'''
 
-    self.driver.get(self.conf.start_url)
+    # init the driver session
+    self.logger.info('init the driver session')
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless=new")
+    driver = webdriver.Chrome(options=options)
+    driver.implicitly_wait(self.conf.implicitly_wait)
+
+    # open the first chapter
+    driver.get(self.conf.start_url)
 
     counter = 0
     while True:
-      self.logger.info(f'reading chapter {counter} at: {self.driver.current_url}')
+      self.logger.info(f'reading chapter {counter} at: {driver.current_url}')
 
       self.book['chapters'].append({
         'index': counter,
-        'name': self.conf.title_func(self.driver),
-        'content': self.conf.read_func(self.driver),
+        'name': self.conf.get_title(driver),
+        'content': self.conf.read(driver),
       })
 
-      if not self.conf.next_func(self.driver):
+      if not self.conf.has_next(driver):
         break
 
+      self.conf.next(driver)  # navigate to next chapter
       counter += 1
+
+    driver.quit()  # close the browser
 
   def save(self, output_path):
     '''save the book'''
