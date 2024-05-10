@@ -103,7 +103,8 @@ class OTB:
     save_content_dir = os.path.join(save_dir, 'OEBPS')
     os.makedirs(save_content_dir, exist_ok=True)
     write(os.path.join(save_content_dir, 'cover.html'), render(prefix_path('templates/cover.html.j2'), self.book), mode='w')
-    write(os.path.join(save_content_dir, 'style.css'), self.conf.style_css if self.conf.style_css else read(prefix_path('templates/style.css')), mode='w')
+    write(os.path.join(save_content_dir, 'style.css'),
+          self.conf.style_css if self.conf.style_css else read(prefix_path('templates/style.css')), mode='w')
 
     return save_dir
 
@@ -129,4 +130,4 @@ class OTB:
           epub.write(os.path.join(root, file), arcname=os.path.join(root.replace(save_dir, ''), file))
 
     # delete the temporary directory
-    # shutil.rmtree(save_dir)
+    shutil.rmtree(save_dir)
