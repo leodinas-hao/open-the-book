@@ -19,7 +19,7 @@ google-chrome --version
 - download & install the driver
 ```sh
 # download the driver file
-wget https://storage.googleapis.com/chrome-for-testing-public/123.0.6312.86/linux64/chromedriver-linux64.zip
+wget https://storage.googleapis.com/chrome-for-testing-public/124.0.6367.201/linux64/chromedriver-linux64.zip
 
 unzip chromedriver-linux64.zip
 # move the file to /usr/bin
