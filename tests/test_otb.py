@@ -64,3 +64,25 @@ def test_otb_3_epub():
   OTB(conf).open(output, index=1747)
 
   assert os.path.exists(output)
+
+
+def test_otb_4_epub():
+  next_link_selector = 'a#pb_next'
+  conf = Conf(
+    title='乱世书',
+    author='姬叉',
+    # start_url='https://m.biqu7.cc/book/137426/1.html',
+    # start_url='https://m.biqu7.cc/book/137426/316_3.html',
+    # start_url='https://m.biqu7.cc/book/137426/814.html',
+    start_url='https://7fe80a.bi28.cc/html/94999/951.html',
+    get_title=lambda d: d.find_element(By.CSS_SELECTOR, 'div.header span.title').text.replace('_乱世书', '').strip(),
+    read=lambda d: d.find_element(By.CSS_SELECTOR, '#chaptercontent').text.replace('\n\n', '<br/>').replace(
+      '（温馨提示：请关闭畅读或阅读模式，否则内容无法正常显示）', '').replace('请收藏：https://m.biqu7.cc', '').replace('请收藏：https://m.bi27.cc', '').strip(),
+    has_next=lambda d: d.current_url != 'https://7fe80a.bi28.cc/html/94999/951.html',
+    next=lambda d: d.find_element(By.CSS_SELECTOR, next_link_selector).click(),
+  )
+
+  output = 'temp/乱世书.epub'
+  OTB(conf).open(output, index=3057)
+
+  assert os.path.exists(output)
