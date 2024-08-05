@@ -86,3 +86,22 @@ def test_otb_4_epub():
   OTB(conf).open(output, index=3057)
 
   assert os.path.exists(output)
+
+
+def test_otb_5_epub():
+  next_link_selector = '#PanBottom > div > div.erzibottom:nth-child(3)'
+
+  conf = Conf(
+    title='乱世书',
+    author='姬叉',
+    start_url='https://www.wxdzs.net/wxread/96213_50567610.html',
+    get_title=lambda d: d.find_element(By.CSS_SELECTOR, 'h1#ChapterTitle').text.strip(),
+    read=lambda d: d.find_element(By.CSS_SELECTOR, 'div#Lab_Contents').get_attribute('innerHTML').strip(),
+    has_next=lambda d: d.current_url != 'https://www.wxdzs.net/wxread/96213_52226984.html',
+    next=lambda d: d.find_element(By.CSS_SELECTOR, next_link_selector).click(),
+  )
+
+  output = 'temp/乱世书.epub'
+  OTB(conf).open(output, index=0)
+
+  assert os.path.exists(output)
