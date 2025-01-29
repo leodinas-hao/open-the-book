@@ -105,3 +105,37 @@ def test_otb_5_epub():
   OTB(conf).open(output, index=0)
 
   assert os.path.exists(output)
+
+
+def test_otb_6_epub():
+
+  def _get_contents(d):
+
+    # JavaScript to check if an element is visible
+    is_visible_script = """
+        return (function(e) {
+            var style = window.getComputedStyle(e);
+            return style.display !== 'none'
+        })(arguments[0]);
+    """
+
+    divs = d.find_elements(By.CSS_SELECTOR, 'div#content > div')
+    visible_divs = [div for div in divs if d.execute_script(is_visible_script, div)]
+    combined_html = ''.join([div.get_attribute('outerHTML') for div in visible_divs])
+    # remove html tags & its contents including: strike,code,bdo,abbr,var,tt,cite,sub,big,kbd,dfn,samp
+    return re.sub(r'<(strike|code|bdo|abbr|var|tt|cite|sub|big|kbd|dfn|samp).*?>.*?</\1>', '', combined_html)
+
+  conf = Conf(
+    title='长夜余火',
+    author='爱潜水的乌贼',
+    start_url='https://www.hetushu.com/book/6382/4702644.html',
+    get_title=lambda d: d.find_element(By.CSS_SELECTOR, 'div#ctitle > div.title').get_attribute('innerHTML').strip(),
+    read=lambda d: _get_contents(d),
+    has_next=lambda d: d.current_url != 'https://www.hetushu.com/book/6382/4703586.html',
+    next=lambda d: d.find_element(By.CSS_SELECTOR, 'a#next').click(),
+  )
+
+  output = 'temp/长夜余火.epub'
+  OTB(conf).open(output, index=0)
+
+  assert os.path.exists(output)
